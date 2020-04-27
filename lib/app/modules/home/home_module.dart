@@ -15,8 +15,10 @@ class HomeModule extends ChildModule {
         // Controllers
         Bind((i) => CardProductController()),
         Bind((i) => HomeController(i.get<HomeRepository>())),
-        Bind((i) => UpdateProductController(
-            i.get<UpProductRepository>(), i.params["id"])),
+        Bind(
+            (i) => UpdateProductController(
+                i.get<UpProductRepository>(), i.params['id']),
+            singleton: false),
 
         // Repositories
         Bind((i) => HomeRepository(AppModule.to.get<HasuraConnect>())),
@@ -26,9 +28,9 @@ class HomeModule extends ChildModule {
   @override
   List<Router> get routers => [
         Router('/', child: (_, args) => HomePage()),
-        Router('/update',
+        Router('/update/:id',
             child: (_, args) =>
-                UpdateProductPage(idProduct: args.params["id"])),
+                UpdateProductPage(idProduct: args.params['id'])),
       ];
 
   static Inject get to => Inject<HomeModule>.of();

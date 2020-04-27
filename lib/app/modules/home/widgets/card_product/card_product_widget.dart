@@ -20,7 +20,7 @@ class CardProductWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.of(context).pushNamed("/update/$idProduct");
+        Navigator.of(context).pushNamed('/update/$idProduct');
       },
       child: Card(
         child: Stack(

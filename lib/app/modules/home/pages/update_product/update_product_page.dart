@@ -24,11 +24,15 @@ class _UpdateProductPageState
 
   _UpdateProductPageState(this.idProduct);
 
+  UpdateProductController controller;
+  @override
+  void initState() {
+    controller = HomeModule.to.get<UpdateProductController>({'id': idProduct});
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    var updateProductController =
-        HomeModule.to.get<UpdateProductController>({"id": idProduct});
-
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -78,9 +82,9 @@ class _UpdateProductPageState
                 ),
                 Observer(builder: (_) {
                   return TextField(
-                    controller: TextEditingController(
-                        text: updateProductController.description),
-                    onChanged: updateProductController.setDescription,
+                    controller:
+                        TextEditingController(text: controller.description),
+                    onChanged: controller.setDescription,
                     style: TextStyle(color: Theme.of(context).primaryColor),
                     decoration: InputDecoration(
                       hintText: "Descrição do produto",
@@ -115,9 +119,8 @@ class _UpdateProductPageState
                 ),
                 Observer(builder: (_) {
                   return TextField(
-                    controller: TextEditingController(
-                        text: updateProductController.price),
-                    onChanged: updateProductController.setPrice,
+                    controller: TextEditingController(text: controller.price),
+                    onChanged: controller.setPrice,
                     keyboardType: TextInputType.number,
                     style: TextStyle(color: Theme.of(context).primaryColor),
                     decoration: InputDecoration(
@@ -152,7 +155,7 @@ class _UpdateProductPageState
                   ),
                 ),
                 Observer(builder: (_) {
-                  if (updateProductController.productUpdate == null) {
+                  if (controller.productUpdate == null) {
                     return Container(
                       padding: const EdgeInsets.all(8),
                       decoration: BoxDecoration(
@@ -175,13 +178,12 @@ class _UpdateProductPageState
                   }
 
                   return CustomComboboxWidget(
-                    items: updateProductController.productUpdate.categories
+                    items: controller.productUpdate.categories
                         .map((value) => Model(value.id, value.description))
                         .toList(),
-                    selectedItem: Model(
-                        updateProductController.selectedCategory.id,
-                        updateProductController.selectedCategory.description),
-                    onChanged: (value) => updateProductController.setCategory(
+                    selectedItem: Model(controller.selectedCategory.id,
+                        controller.selectedCategory.description),
+                    onChanged: (value) => controller.setCategory(
                         TypeOrCategoryDto(
                             id: value.id, description: value.description)),
                   );
@@ -194,7 +196,7 @@ class _UpdateProductPageState
                   ),
                 ),
                 Observer(builder: (_) {
-                  if (updateProductController.productUpdate == null) {
+                  if (controller.productUpdate == null) {
                     return Container(
                       padding: const EdgeInsets.all(8),
                       decoration: BoxDecoration(
@@ -217,14 +219,13 @@ class _UpdateProductPageState
                   }
 
                   return CustomComboboxWidget(
-                    items: updateProductController.productUpdate.productType
+                    items: controller.productUpdate.productType
                         .map((value) => Model(value.id, value.description))
                         .toList(),
-                    selectedItem: Model(updateProductController.selectedType.id,
-                        updateProductController.selectedType.description),
-                    onChanged: (value) => updateProductController.setType(
-                        TypeOrCategoryDto(
-                            id: value.id, description: value.description)),
+                    selectedItem: Model(controller.selectedType.id,
+                        controller.selectedType.description),
+                    onChanged: (value) => controller.setType(TypeOrCategoryDto(
+                        id: value.id, description: value.description)),
                   );
                 }),
                 SizedBox(height: 5),
@@ -233,8 +234,7 @@ class _UpdateProductPageState
                   width: MediaQuery.of(context).size.width,
                   child: RaisedButton(
                     onPressed: () async {
-                      var result =
-                          await updateProductController.updateProduct();
+                      var result = await controller.updateProduct();
 
                       if (result) {
                         Navigator.of(context).pop();
