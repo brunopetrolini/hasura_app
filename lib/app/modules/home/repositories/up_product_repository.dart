@@ -10,27 +10,28 @@ class UpProductRepository extends Disposable {
   Future<IdProductCategoryTypeDto> getProductIdTypeCategory(String id) async {
     var query = '''
           query getProductIdCategoryType(\$product_id: uuid) {
-            products(where: {id: {_eq: \$product_id}}) {
-              id
-              name
-              price
-              category {
+            tipo_produto {
                 id
-                description
+                descricao
               }
-              product_type {
+              categoria_produto {
                 id
-                description
+                descricao
               }
-            }
-            categories {
-              id
-              description
-            }
-            product_type {
-              id
-              description
-            }
+              produto_by_pk(id: \$idProduto) {
+                id
+                nome
+                valor
+                tipo_produto_id
+                categoria_produto {
+                  id
+                  descricao
+                }
+                tipo_produto {
+                  id
+                  descricao
+                }
+              }
           }
     ''';
 
